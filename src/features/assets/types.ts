@@ -1,4 +1,9 @@
 import { z } from "zod";
+import {
+  assetAdvisoryPreviewSchema,
+  exposureSchema,
+  remediationLevelSchema,
+} from "@/features/advisories/types";
 import { VersionStatus } from "@/generated/prisma";
 import { createPaginatedResponseSchema } from "@/lib/pagination";
 
@@ -83,10 +88,25 @@ export const assetResponseSchema = z.object({
   product: z.string(),
   version: z.string().nullable(),
   versionStatus: versionStatusSchema,
+  exposure: exposureSchema,
+  maxSeverity: z
+    .number()
+    .describe(
+      "Highest CVSS score across the advisories matched to this asset.",
+    ),
+  advisoryCount: z.number().int(),
+  remediation: remediationLevelSchema.nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
 export type AssetResponse = z.infer<typeof assetResponseSchema>;
 
+export const assetListItemSchema = assetResponseSchema.extend({
+  advisories: z
+    .array(assetAdvisoryPreviewSchema)
+    .describe("Up to three matched advisories, most severe first."),
+});
+export type AssetListItem = z.infer<typeof assetListItemSchema>;
+
 export const paginatedAssetResponseSchema =
-  createPaginatedResponseSchema(assetResponseSchema);
+  createPaginatedResponseSchema(assetListItemSchema);

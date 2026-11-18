@@ -1,0 +1,260 @@
+{
+  "document": {
+    "category": "csaf_security_advisory",
+    "csaf_version": "2.0",
+    "title": "Contec Health CMS8000 Patient Monitor (Update A)",
+    "lang": "en-US",
+    "publisher": {
+      "category": "coordinator",
+      "contact_details": "central@cisa.dhs.gov",
+      "name": "CISA",
+      "namespace": "https://www.cisa.gov/"
+    },
+    "notes": [
+      {
+        "category": "summary",
+        "text": "Successful exploitation of these vulnerabilities could allow an attacker to remotely send specially formatted UDP requests or connect to an unknown external network that would allow them to write arbitrary data, resulting in remote code execution. The device may also leak patient information and sensor data to the same unknown external network. Simultaneous exploitation of all vulnerable devices on a shared network is possible.",
+        "title": "Risk evaluation"
+      },
+      {
+        "category": "other",
+        "text": "Healthcare and Public Health",
+        "title": "Critical infrastructure sectors"
+      },
+      {
+        "category": "general",
+        "text": "CISA recommends users take defensive measures to minimize the risk of exploitation of these vulnerabilities, such as:",
+        "title": "Recommended Practices"
+      }
+    ],
+    "references": [
+      {
+        "category": "self",
+        "summary": "ICS Advisory ICSMA-25-030-01 JSON",
+        "url": "https://raw.githubusercontent.com/cisagov/CSAF/develop/csaf_files/OT/white/2025/icsma-25-030-01.json"
+      },
+      {
+        "category": "self",
+        "summary": "ICSA Advisory ICSMA-25-030-01 - Web Version",
+        "url": "https://www.cisa.gov/news-events/ics-medical-advisories/icsma-25-030-01"
+      },
+      {
+        "category": "external",
+        "summary": "Recommended Practices",
+        "url": "https://www.cisa.gov/uscert/ics/alerts/ICS-ALERT-10-301-01"
+      }
+    ],
+    "tracking": {
+      "current_release_date": "2025-02-25T07:00:00.000000Z",
+      "generator": {
+        "engine": {
+          "name": "CISA CSAF Generator",
+          "version": "1.0.0"
+        }
+      },
+      "id": "ICSMA-25-030-01",
+      "initial_release_date": "2025-01-30T07:00:00.000000Z",
+      "revision_history": [
+        {
+          "date": "2025-01-30T07:00:00.000000Z",
+          "legacy_version": "Initial",
+          "number": "1",
+          "summary": "Initial Publication"
+        },
+        {
+          "date": "2025-02-25T07:00:00.000000Z",
+          "legacy_version": "Update A",
+          "number": "2",
+          "summary": "Update A - Added CVE-2025-1204, updated description for CVE-2025-0626. Added mitigations for the specific IP addresses. Added researcher credit to Claroty for CVE-2025-1204."
+        }
+      ],
+      "status": "final",
+      "version": "2"
+    }
+  },
+  "product_tree": {
+    "branches": [
+      {
+        "branches": [
+          {
+            "branches": [
+              {
+                "category": "product_version",
+                "name": "smart3250-2.6.27-wlan2.1.7.cramfs",
+                "product": {
+                  "name": "Contec Health CMS8000 Patient Monitor Firmware: smart3250-2.6.27-wlan2.1.7.cramfs",
+                  "product_id": "CSAFPID-0001"
+                }
+              }
+            ],
+            "category": "product_name",
+            "name": "CMS8000 Patient Monitor Firmware"
+          },
+          {
+            "branches": [
+              {
+                "category": "product_version",
+                "name": "CMS7.820.075.08/0.74(0.75)",
+                "product": {
+                  "name": "Contec Health CMS8000 Patient Monitor Firmware: CMS7.820.075.08/0.74(0.75)",
+                  "product_id": "CSAFPID-0002"
+                }
+              }
+            ],
+            "category": "product_name",
+            "name": "CMS8000 Patient Monitor Firmware"
+          },
+          {
+            "branches": [
+              {
+                "category": "product_version",
+                "name": "CMS7.820.120.01/0.93(0.95)",
+                "product": {
+                  "name": "Contec Health CMS8000 Patient Monitor Firmware: CMS7.820.120.01/0.93(0.95)",
+                  "product_id": "CSAFPID-0003"
+                }
+              }
+            ],
+            "category": "product_name",
+            "name": "CMS8000 Patient Monitor Firmware"
+          },
+          {
+            "branches": [
+              {
+                "category": "product_version_range",
+                "name": "vers:all/*",
+                "product": {
+                  "name": "Contec Health CMS8000 Patient Monitor: vers:all/*",
+                  "product_id": "CSAFPID-0004"
+                }
+              }
+            ],
+            "category": "product_name",
+            "name": "CMS8000 Patient Monitor"
+          }
+        ],
+        "category": "vendor",
+        "name": "Contec Health"
+      }
+    ]
+  },
+  "vulnerabilities": [
+    {
+      "cve": "CVE-2024-12248",
+      "cwe": {
+        "id": "CWE-787",
+        "name": "Out-of-bounds Write"
+      },
+      "notes": [
+        {
+          "category": "summary",
+          "text": "The affected product is vulnerable to an out-of-bounds write, which could allow an attacker to send specially formatted UDP requests in order to write arbitrary data. This could result in remote code execution.",
+          "title": "Vulnerability Summary"
+        }
+      ],
+      "product_status": {
+        "known_affected": ["CSAFPID-0001", "CSAFPID-0002", "CSAFPID-0003"]
+      },
+      "remediations": [
+        {
+          "category": "mitigation",
+          "details": "Per FDA recommendation, CISA recommends users remove any Contec CMS8000 devices from their networks.",
+          "product_ids": ["CSAFPID-0001", "CSAFPID-0002", "CSAFPID-0003"]
+        },
+        {
+          "category": "mitigation",
+          "details": "If asset owners cannot remove the devices from their networks, users should block 202.114.4.0/24 from their networks, or block 202.114.4.119 and 202.114.4.120.",
+          "product_ids": ["CSAFPID-0001", "CSAFPID-0002", "CSAFPID-0003"]
+        },
+        {
+          "category": "mitigation",
+          "details": "Please note that this device may be re-labeled and sold by resellers. For a list of known re-labeled devices, please refer to FDA's safety communication.",
+          "product_ids": ["CSAFPID-0001", "CSAFPID-0002", "CSAFPID-0003"],
+          "url": "https://www.fda.gov/medical-devices/safety-communications/cybersecurity-vulnerabilities-certain-patient-monitors-contec-and-epsimed-fda-safety-communication"
+        }
+      ],
+      "scores": [
+        {
+          "cvss_v3": {
+            "baseScore": 9.8,
+            "baseSeverity": "CRITICAL",
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "products": ["CSAFPID-0001", "CSAFPID-0002", "CSAFPID-0003"]
+        }
+      ]
+    },
+    {
+      "cve": "CVE-2025-0626",
+      "cwe": {
+        "id": "CWE-912",
+        "name": "Hidden Functionality"
+      },
+      "notes": [
+        {
+          "category": "summary",
+          "text": "The \"monitor\" binary in the firmware of the affected product attempts to mount to a hard-coded, routable IP address, bypassing existing device network settings to do so. The function also enables the network interface of the device if it is disabled. The function is triggered by attempting to update the device from the user menu. This could serve as a backdoor to the device, and could lead to a malicious actor being able to upload and overwrite files on the device.",
+          "title": "Vulnerability Summary"
+        }
+      ],
+      "product_status": {
+        "known_affected": [
+          "CSAFPID-0001",
+          "CSAFPID-0002",
+          "CSAFPID-0003",
+          "CSAFPID-0004"
+        ]
+      },
+      "remediations": [
+        {
+          "category": "mitigation",
+          "details": "Per FDA recommendation, CISA recommends users remove any Contec CMS8000 devices from their networks.",
+          "product_ids": [
+            "CSAFPID-0001",
+            "CSAFPID-0002",
+            "CSAFPID-0003",
+            "CSAFPID-0004"
+          ]
+        },
+        {
+          "category": "mitigation",
+          "details": "If asset owners cannot remove the devices from their networks, users should block 202.114.4.0/24 from their networks, or block 202.114.4.119 and 202.114.4.120.",
+          "product_ids": [
+            "CSAFPID-0001",
+            "CSAFPID-0002",
+            "CSAFPID-0003",
+            "CSAFPID-0004"
+          ]
+        },
+        {
+          "category": "mitigation",
+          "details": "Please note that this device may be re-labeled and sold by resellers. For a list of known re-labeled devices, please refer to FDA's safety communication.",
+          "product_ids": [
+            "CSAFPID-0001",
+            "CSAFPID-0002",
+            "CSAFPID-0003",
+            "CSAFPID-0004"
+          ],
+          "url": "https://www.fda.gov/medical-devices/safety-communications/cybersecurity-vulnerabilities-certain-patient-monitors-contec-and-epsimed-fda-safety-communication"
+        }
+      ],
+      "scores": [
+        {
+          "cvss_v3": {
+            "baseScore": 7.5,
+            "baseSeverity": "HIGH",
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "version": "3.1"
+          },
+          "products": [
+            "CSAFPID-0001",
+            "CSAFPID-0002",
+            "CSAFPID-0003",
+            "CSAFPID-0004"
+          ]
+        }
+      ]
+    }
+  ]
+}

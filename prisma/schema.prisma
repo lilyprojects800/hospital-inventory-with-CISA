@@ -25,12 +25,165 @@ model Asset {
   version       String?
   versionStatus VersionStatus @default(UNKNOWN)
 
+  exposure      Exposure          @default(NONE)
+  maxSeverity   Float             @default(0)
+  advisoryCount Int               @default(0)
+  remediation   RemediationLevel?
+
+  matches AssetAdvisoryMatch[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([createdAt])
   @@index([updatedAt])
+  @@index([exposure, maxSeverity])
   @@map("asset")
+}
+
+model Advisory {
+  id              String   @id
+  title           String
+  url             String
+  csafUrl         String
+  csafPath        String   @unique
+  severity        Float    @default(0)
+  summary         String?
+  revision        String
+  revisionSummary String?
+  releasedAt      DateTime
+  revisedAt       DateTime
+  sourceUpdatedAt DateTime
+  raw             Json
+
+  products        AdvisoryProduct[]
+  vulnerabilities Vulnerability[]
+  remediations    Remediation[]
+  matches         AssetAdvisoryMatch[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([revisedAt])
+  @@map("advisory")
+}
+
+model AdvisoryProduct {
+  id          String        @id @default(cuid())
+  advisoryId  String
+  productId   String
+  vendor      String
+  productName String
+  fullName    String
+  versionSpec String?
+  status      ProductStatus
+
+  advisory Advisory @relation(fields: [advisoryId], references: [id], onDelete: Cascade)
+
+  @@unique([advisoryId, productId])
+  @@index([status])
+  @@map("advisory_product")
+}
+
+model Vulnerability {
+  id           String   @id @default(cuid())
+  advisoryId   String
+  cve          String?
+  title        String?
+  cwe          String?
+  summary      String?
+  cvssScore    Float?
+  cvssSeverity String?
+  cvssVector   String?
+  productIds   String[]
+
+  advisory Advisory @relation(fields: [advisoryId], references: [id], onDelete: Cascade)
+
+  @@index([advisoryId])
+  @@map("vulnerability")
+}
+
+model Remediation {
+  id         String              @id @default(cuid())
+  advisoryId String
+  category   RemediationCategory
+  details    String
+  url        String?
+  productIds String[]
+
+  advisory Advisory @relation(fields: [advisoryId], references: [id], onDelete: Cascade)
+
+  @@index([advisoryId])
+  @@map("remediation")
+}
+
+model AssetAdvisoryMatch {
+  id                String           @id @default(cuid())
+  assetId           String
+  advisoryId        String
+  status            MatchStatus
+  reason            String
+  matchedProductIds String[]
+  severity          Float            @default(0)
+  remediation       RemediationLevel
+  firstDetectedAt   DateTime         @default(now())
+
+  asset    Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  advisory Advisory @relation(fields: [advisoryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([assetId, advisoryId])
+  @@index([advisoryId])
+  @@map("asset_advisory_match")
+}
+
+model SyncState {
+  id             String    @id
+  running        Boolean   @default(false)
+  lastStartedAt  DateTime?
+  lastFinishedAt DateTime?
+  lastSuccessAt  DateTime?
+  lastError      String?
+  lastChanged    Int       @default(0)
+
+  @@map("sync_state")
+}
+
+enum Exposure {
+  NONE
+  POSSIBLY_AFFECTED
+  AFFECTED
+}
+
+enum MatchStatus {
+  POSSIBLY_AFFECTED
+  AFFECTED
+}
+
+enum ProductStatus {
+  AFFECTED
+  UNDER_INVESTIGATION
+  FIXED
+  NOT_AFFECTED
+  UNLISTED
+}
+
+enum RemediationCategory {
+  VENDOR_FIX
+  WORKAROUND
+  MITIGATION
+  NO_FIX_PLANNED
+  NONE_AVAILABLE
+  OPTIONAL_PATCH
+  FIX_PLANNED
+}
+
+enum RemediationLevel {
+  NO_REMEDIATION
+  MITIGATION_ONLY
+  VENDOR_FIX
 }
 
 // Why an asset does or doesn't have a version.

@@ -30,6 +30,12 @@ export const useCreateAsset = () => {
         toast.success(`Asset "${data.product}" (${data.ip}) created`);
         // Invalidate all getMany queries regardless of params (page, search, etc.)
         queryClient.invalidateQueries(trpc.assets.getMany.pathFilter());
+        queryClient.invalidateQueries(trpc.advisories.summary.pathFilter());
+        if (data.exposure !== "NONE") {
+          toast.warning(
+            `"${data.product}" matches ${data.advisoryCount} CISA ${data.advisoryCount === 1 ? "advisory" : "advisories"}`,
+          );
+        }
       },
       onError: (error) => {
         toast.error(`Failed to create asset: ${error.message}`);

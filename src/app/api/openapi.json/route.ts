@@ -8,7 +8,7 @@ export async function GET() {
     description: "API for managing assets in hospital environments",
     version: "1.0.0",
     baseUrl: `${getBaseUrl()}/api/v1`,
-    tags: ["Assets"],
+    tags: ["Assets", "Advisories"],
     // The API has no authentication, so don't advertise the default bearer scheme
     securitySchemes: {},
   });
